@@ -1,12 +1,12 @@
+import React from 'react';
 import { useEffect, useState, ReactNode } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
+import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -24,31 +24,27 @@ const DRAWER_WIDTH = 240;
 const DRAWER_ITEMS = [
   {
     name: 'Dashboard',
-    link: '/'
+    link: '/',
   },
   {
     name: 'Send Tokens',
-    link: '/send'
+    link: '/send',
   },
-]
-
+];
 
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
   justifyContent: 'flex-end',
 }));
 
-export default function Layout({
-  children
-}: { children: ReactNode }) {
+export default function Layout({ children }: { children: ReactNode }) {
   const theme = useTheme();
-  const router = useRouter()
+  const router = useRouter();
 
-  const portal = usePortal()
+  const portal = usePortal();
   const [solanaAddress, setSolanaAddress] = useState('');
 
   const [open, setOpen] = useState(false);
@@ -62,8 +58,8 @@ export default function Layout({
   };
 
   useEffect(() => {
-    if (portal.ready) portal.getSolanaAddress()
-  }, [portal.ready])
+    if (portal.ready) portal.getSolanaAddress();
+  }, [portal.ready]);
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -83,36 +79,44 @@ export default function Layout({
               </IconButton>
               <Box sx={{ flexGrow: 1 }}></Box>
               <Box>
-                {
-                  !!solanaAddress ?
-                    <TextField
-                      size="small"
-                      id="outlined-controlled"
-                      label="Solana Address"
-                      value={solanaAddress}
-                      spellCheck={false}
-                      InputProps={{
-
-                        disableUnderline: true,
-                        endAdornment: <InputAdornment position="end">
+                {solanaAddress ? (
+                  <TextField
+                    size="small"
+                    label="Solana Address"
+                    value={solanaAddress}
+                    spellCheck={false}
+                    InputProps={{
+                      sx: {
+                        color: 'white',
+                      },
+                      disableUnderline: true,
+                      endAdornment: (
+                        <InputAdornment position="end">
                           <IconButton
-                            onClick={() => navigator.clipboard.writeText(solanaAddress)}
+                            size='small'
+                            onClick={() =>
+                              navigator.clipboard.writeText(solanaAddress)
+                            }
                             edge="end"
                           >
-                            <ContentCopy />
+                            <ContentCopy fontSize='small' />
                           </IconButton>
                         </InputAdornment>
-                      }}
-                    />
-                    :
-                    <Button
-                      color='inherit'
-                      variant="outlined"
-                      onClick={async () => setSolanaAddress(await portal!.getSolanaAddress())}
-                      endIcon={<Send />}>
-                      Get Solana Wallet
-                    </Button>
-                }
+                      ),
+                    }}
+                  />
+                ) : (
+                  <Button
+                    color="inherit"
+                    variant="outlined"
+                    onClick={async () =>
+                      setSolanaAddress(await portal!.getSolanaAddress())
+                    }
+                    endIcon={<Send />}
+                  >
+                    Get Solana Wallet
+                  </Button>
+                )}
               </Box>
             </Toolbar>
           </Container>
@@ -132,7 +136,11 @@ export default function Layout({
         >
           <DrawerHeader>
             <IconButton onClick={handleDrawerClose}>
-              {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+              {theme.direction === 'ltr' ? (
+                <ChevronLeftIcon />
+              ) : (
+                <ChevronRightIcon />
+              )}
             </IconButton>
           </DrawerHeader>
           <Divider />
@@ -140,9 +148,6 @@ export default function Layout({
             {DRAWER_ITEMS.map((item, index) => (
               <ListItem key={index} disablePadding>
                 <ListItemButton onClick={() => router.push(item.link)}>
-                  {/* <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                  </ListItemIcon> */}
                   <ListItemText primary={item.name} />
                 </ListItemButton>
               </ListItem>
