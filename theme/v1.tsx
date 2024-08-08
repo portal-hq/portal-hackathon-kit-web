@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const themeV1 = createTheme({
   palette: {
     primary: {
-      main: "#0081AD",
+      main: "#3e71f8",
       light: "#D9ECF3",
       dark: "#004B66",
     },
@@ -26,4 +26,13 @@ export const themeV1 = createTheme({
   typography: {
     fontFamily: inter.style.fontFamily,
   },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: 'none'
+        }
+      }
+    }
+  }
 });

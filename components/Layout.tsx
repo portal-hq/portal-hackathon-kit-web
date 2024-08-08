@@ -14,10 +14,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import { useRouter } from 'next/router';
 import { Button, Container, InputAdornment, TextField } from '@mui/material';
 import { usePortal } from '@/providers/portal';
@@ -65,8 +62,8 @@ export default function Layout({
   };
 
   useEffect(() => {
-    console.log(portal)
-  }, [portal, portal?.ready])
+    if (portal.ready) portal.getSolanaAddress()
+  }, [portal.ready])
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -93,14 +90,13 @@ export default function Layout({
                       id="outlined-controlled"
                       label="Solana Address"
                       value={solanaAddress}
-                      contentEditable={false}
                       spellCheck={false}
                       InputProps={{
 
                         disableUnderline: true,
                         endAdornment: <InputAdornment position="end">
                           <IconButton
-                            // onClick={}
+                            onClick={() => navigator.clipboard.writeText(solanaAddress)}
                             edge="end"
                           >
                             <ContentCopy />
@@ -112,8 +108,7 @@ export default function Layout({
                     <Button
                       color='inherit'
                       variant="outlined"
-                      disabled={!portal?.ready}
-                      onClick={async () => setSolanaAddress(await portal!.getSolanaWallet())}
+                      onClick={async () => setSolanaAddress(await portal!.getSolanaAddress())}
                       endIcon={<Send />}>
                       Get Solana Wallet
                     </Button>
