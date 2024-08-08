@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Example Hackathon Kit
+
+![PayPal Logo](https://cdn.prod.website-files.com/66a9400bd5456b4248f11c92/66a940ca7f391719bd5ba2db_PayPal%201.png)
+![Portal Logo](https://cdn.prod.website-files.com/66a9400bd5456b4248f11c92/66a940c97f391719bd5ba2b9_Portal%20logo%201.png)
+![Solana Logo](https://cdn.prod.website-files.com/66a9400bd5456b4248f11c92/66a940ca7f391719bd5ba2c5_Solana%20(SOL)%201.png)
+
+This is simple repo used to build an application on top of PayPal's PYUSD stablecoin, on the Solana blockchain, using Portal's MPC wallet infrastructure.
+
+## Requirements
+
+Before going through the quick start you'll need following tools with the minimum versions:
+
+- git
+- Node (^18.2.0)
+- yarn or npm
+- Portal Account (need a link to docs to create a Portal Account)
+- Portal Client API Key (need a link to docs to create a Poral Client API Key)
 
 ## Getting Started
 
-First, run the development server:
+To get spun up follow these steps.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. Clone the repo and install dependencies.
+   ```bash
+   git clone https://github.com/portal-hq/portal-hackathon-kit-web
+   cd portal-hackathon-kit-web
+   yarn
+   ```
+2. Paste your Portal Client API Key into the `next.config.mjs` file.
+3. Run the example app.
+   ```bash
+   yarn dev
+   ```
+4. Press "Get Solana Wallet" to create a wallet. You'll see your Solana address.
+5. Take your address and go to the [PYUSD faucet](https://faucet.paxos.com/) to get some test PYUSD.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Understanding the Repo
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `pages` and `components` contain files for all the [web pages or routes](https://nextjs.org/docs/pages/building-your-application/routing/pages-and-layouts) and reusable [React components](https://react.dev/learn/your-first-component)
+- `providers` contains [React contexts and respective providers](https://react.dev/learn/passing-data-deeply-with-context) i.e. shared state and logic for use across the app
+- `public` contains all the [static images (or assets)](https://nextjs.org/docs/app/building-your-application/optimizing/static-assets) used
+- `theme` contains [MUI theming context](https://mui.com/material-ui/customization/theming/) which defines the base style for UI elements
+- `next.config.mjs` contains [non-sensitive environment variables](https://nextjs.org/docs/pages/api-reference/next-config-js/env)
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Portal & PYUSD Documentation
 
-## Learn More
+### Portal SDK Reference
 
-To learn more about Next.js, take a look at the following resources:
+Portal's SDKs have several pieces of core functionality.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [Generating a Wallet](https://docs.portalhq.io/guides/web/create-a-wallet): This function creates MPC key shares on your local device and the Portal servers. These key shares support all EVM chains and Solana.
+- [Signing a Transaction](https://docs.portalhq.io/guides/web/sign-a-transaction): This function signs a provided transaction, and can broadcast that transaction to a chain when an RPC gateway URL is provided.
+- [Signature Hooks](https://docs.portalhq.io/guides/web/add-custom-signature-hooks): By default this repo will submit a transaction without prompting a user, but you can use signature hooks to build a prompt for users before submitting a transaction for signing.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### Portal APIs
 
-## Deploy on Vercel
+Portal supplies several APIs for simplifying your development.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- [Get Assets](https://docs.portalhq.io/reference/client-api/v3-endpoints#get-assets-by-chain): This endpoint returns a list of fungible asset (native, ERC-20, and SPL tokens) associated with your client for a given chain.
+- [Get NFTs](https://docs.portalhq.io/reference/client-api/v3-endpoints#get-nft-assets-by-chain): This endpoint returns a list of the NFTs associated with your client for a given chain.
+- [Get Transactions](https://docs.portalhq.io/reference/client-api/v3-endpoints#get-transactions-by-chain): This endpoint returns a list of the historic transactions associated with your client for a given chain.
+- [Build a Transaction - Send Asset](https://docs.portalhq.io/reference/client-api/v3-endpoints#build-a-send-asset-transaction): This endpoint builds a formatted transaction to send a fungible asset (native, ERC-20, and SPL tokens) for a given chain.
+- [Evaluate a Transaction](https://docs.portalhq.io/reference/client-api/v3-endpoints#evaluate-a-transaction): This endpoint can simulate a transaction and/or scan a transaction for security concerns.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### PYUSD Documentation
+
+- [PYUSD on Solana](https://solana.com/news/pyusd-paypal-solana-developer): An overview of PYUSD on Solana.
+- [PYUSD Quick Start Guide](https://developer.paypal.com/community/blog/pyusd-quick-start-guide/): A quick overview of PYUSD and information behind it.
+- [PYUSD Solana Testnet Faucet](https://faucet.paxos.com/): Use this faucet to get testnet PYUSD on Solana.
+- [What is PayPal USD](https://www.paypal.com/us/cshelp/article/what-is-paypal-usd-pyusd-help1005): Information about how PYUSD works.
+- [PYUSD Solana (SPL) Mainnet Address](https://explorer.solana.com/address/2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo): `2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo`
+- [PYUSD Solana (SPL) Devnet Address](https://explorer.solana.com/address/CXk2AMBfi3TwaEL2468s6zP8xq9NxTXjp9gjMgzeUynM?cluster=devnet): `CXk2AMBfi3TwaEL2468s6zP8xq9NxTXjp9gjMgzeUynM`
+
+### Solana Documentation
+
+- [Intro to Solana Development](https://solana.com/developers/guides/getstarted/hello-world-in-your-browser): An introduction to development on Solana.
+- [Solana SPL Token Docs](https://spl.solana.com/token): Documentation on SPL tokens.
+
+### Faucets
+
+- [SOL Faucet](https://faucet.solana.com/)
+- [PYUSD Faucet](https://faucet.paxos.com/)
+
+### Other Helpful Resources
+
+- [What is Portal MPC?](https://docs.portalhq.io/resources/portals-mpc-architecture)
+
+## Help
+
+Need help or want to request a feature? Reach out to the PayPal & Portal teams on the [official hackathon Slack channel](https://portalcommunity.slack.com/archives/C07EZFF9N78).
