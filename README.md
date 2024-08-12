@@ -1,4 +1,4 @@
-# Example Hackathon Kit
+# Portal Hackathon Kit - Web
 
 ![PayPal Logo](https://cdn.prod.website-files.com/66a9400bd5456b4248f11c92/66a940ca7f391719bd5ba2db_PayPal%201.png)
 ![Portal Logo](https://cdn.prod.website-files.com/66a9400bd5456b4248f11c92/66a940c97f391719bd5ba2b9_Portal%20logo%201.png)
@@ -13,8 +13,7 @@ Before going through the quick start you'll need following tools with the minimu
 - git
 - Node (^20.16.0)
 - yarn or npm
-- Portal Account (need a link to docs to create a Portal Account)
-- Portal Client API Key (need a link to docs to create a Poral Client API Key)
+- [Portal Account and a Client API Key](https://docs.portalhq.io/support/pyusd-hackathon-hub)
 
 ## Getting Started
 

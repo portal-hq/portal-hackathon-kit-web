@@ -2,7 +2,7 @@ import * as React from 'react';
 import { createContext, useContext, useEffect, useState } from 'react';
 import Portal from '@portal-hq/web';
 
-import pyUsdThumb from '../public/pyusd.png';
+import pyusdThumb from '../public/pyusd.png';
 import solanaThumb from '../public/solana.png';
 
 export interface ITokenBalance {
@@ -39,7 +39,7 @@ export const PortalProvider: React.FC<{ children: React.ReactNode }> = ({
         apiKey: process.env.portalClientApiKey,
         autoApprove: true,
         rpcConfig: {
-          [process.env.solanaChainId!]: 'https://api.devnet.solana.com',
+          [process.env.solanaChainId!]: process.env.solanaRpcUrl!,
         },
       }),
     );
@@ -67,9 +67,9 @@ export const PortalProvider: React.FC<{ children: React.ReactNode }> = ({
           const res = await fetch('/api/getSolanaAssets');
           const data = await res.json();
 
-          const pyUsdBalance: ITokenBalance = data.tokenBalances.find(
+          const pyusdBalance: ITokenBalance = data.tokenBalances.find(
             (tb: ITokenBalance) =>
-              tb.metadata.tokenMintAddress === process.env.pyUsdMint,
+              tb.metadata.tokenMintAddress === process.env.pyusdMint,
           ) || {
             balance: '0',
             decimals: 6,
@@ -77,7 +77,7 @@ export const PortalProvider: React.FC<{ children: React.ReactNode }> = ({
             rawBalance: '0',
             symbol: 'PYUSD',
             metadata: {
-              tokenMintAddress: process.env.pyUsdMint,
+              tokenMintAddress: process.env.pyusdMint,
             },
           };
 
@@ -95,15 +95,15 @@ export const PortalProvider: React.FC<{ children: React.ReactNode }> = ({
               },
             },
             {
-              ...pyUsdBalance,
+              ...pyusdBalance,
               metadata: {
-                ...pyUsdBalance.metadata,
-                thumbnail: pyUsdThumb.src,
+                ...pyusdBalance.metadata,
+                thumbnail: pyusdThumb.src,
               },
             },
             ...data.tokenBalances.filter(
               (tb: ITokenBalance) =>
-                tb.metadata.tokenMintAddress !== process.env.pyUsdMint,
+                tb.metadata.tokenMintAddress !== process.env.pyusdMint,
             ),
           ];
         },

@@ -19,7 +19,7 @@ export default function Home() {
   const snackbar = useSnackbar();
 
   const [to, setTo] = useState('');
-  const [tokenMint, setTokenMint] = useState(process.env.pyUsdMint || '');
+  const [tokenMint, setTokenMint] = useState(process.env.pyusdMint || '');
   const [tokenAmount, setTokenAmount] = useState(0);
   const [tokens, setTokens] = useState<ITokenBalance[]>([]);
   const [tokensLoading, setTokensLoading] = useState(false);
@@ -66,20 +66,31 @@ export default function Home() {
                   defaultValue={tokenMint}
                   onChange={(e) => setTokenMint(e.target.value)}
                 >
-                  {tokens.filter(token => token.metadata.tokenMintAddress !== process.env.solMint).map((token, idx) => (
-                    <MenuItem key={idx} value={token.metadata.tokenMintAddress}>
-                      <Typography fontSize={{ xs: 8, md: 12 }} color="primary">
+                  {tokens
+                    .filter(
+                      (token) =>
+                        token.metadata.tokenMintAddress !== process.env.solMint,
+                    )
+                    .map((token, idx) => (
+                      <MenuItem
+                        key={idx}
+                        value={token.metadata.tokenMintAddress}
+                      >
                         <Typography
-                          component="span"
-                          color="black"
-                          fontSize={{ xs: 12, md: 18 }}
+                          fontSize={{ xs: 8, md: 12 }}
+                          color="primary"
                         >
-                          {token.symbol}{' '}
+                          <Typography
+                            component="span"
+                            color="black"
+                            fontSize={{ xs: 12, md: 18 }}
+                          >
+                            {token.symbol}{' '}
+                          </Typography>
+                          {` ${Number(token.balance).toFixed(3)}`}
                         </Typography>
-                        {` ${Number(token.balance).toFixed(3)}`}
-                      </Typography>
-                    </MenuItem>
-                  ))}
+                      </MenuItem>
+                    ))}
                 </Select>
               </FormControl>
             </Grid>
@@ -91,10 +102,14 @@ export default function Home() {
                 onChange={(e) => setTokenAmount(Number(e.target.value))}
               />
             </Grid>
-            <Grid item xs={12} sx={{
-              display: 'flex',
-              justifyContent: 'center',
-            }}>
+            <Grid
+              item
+              xs={12}
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+              }}
+            >
               <Button
                 size="large"
                 variant="outlined"

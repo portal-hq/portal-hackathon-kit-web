@@ -44,7 +44,7 @@ export default function Home() {
           }}
         >
           <Typography fontSize={{ xs: 12, md: 16 }}>
-            Need SOL or PyUSD? Get them from their respective faucets -{' '}
+            Need SOL or PYUSD? Get them from their respective faucets -{' '}
             <Link href="https://faucet.solana.com/">Solana Faucet</Link> and{' '}
             <Link href="https://faucet.paxos.com/">Paxos Faucet</Link>
           </Typography>
@@ -80,15 +80,20 @@ export default function Home() {
                             alt={token.symbol}
                             src={token.metadata?.thumbnail as string}
                           >
-                            {
-                              !token.metadata?.thumbnail ? <Token /> : <></>
-                            }
+                            {!token.metadata?.thumbnail ? <Token /> : <></>}
                           </Avatar>
                         </ListItemAvatar>
                         <ListItemText
-                          primary={<Typography fontSize={{ xs: 14, md: 16 }}>{token.name}</Typography>}
+                          primary={
+                            <Typography fontSize={{ xs: 14, md: 16 }}>
+                              {token.name}
+                            </Typography>
+                          }
                           secondary={
-                            <Typography display={{ xs: 'none', md: 'block' }} fontSize={12}>
+                            <Typography
+                              display={{ xs: 'none', md: 'block' }}
+                              fontSize={12}
+                            >
                               {token.metadata.tokenMintAddress}
                             </Typography>
                           }
@@ -103,7 +108,10 @@ export default function Home() {
                               fontWeight={600}
                               color="primary"
                             >
-                              <Typography component="span" fontSize={{ xs: 12, md: 16 }}>
+                              <Typography
+                                component="span"
+                                fontSize={{ xs: 12, md: 16 }}
+                              >
                                 {token.symbol}{' '}
                               </Typography>
                               {`${Number(token.balance).toFixed(3)}`}

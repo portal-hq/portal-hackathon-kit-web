@@ -93,13 +93,13 @@ export default function Layout({ children }: { children: ReactNode }) {
                       endAdornment: (
                         <InputAdornment position="end">
                           <IconButton
-                            size='small'
+                            size="small"
                             onClick={() =>
                               navigator.clipboard.writeText(solanaAddress)
                             }
                             edge="end"
                           >
-                            <ContentCopy fontSize='small' />
+                            <ContentCopy fontSize="small" />
                           </IconButton>
                         </InputAdornment>
                       ),
