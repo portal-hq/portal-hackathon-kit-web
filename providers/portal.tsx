@@ -67,6 +67,8 @@ export const PortalProvider: React.FC<{ children: React.ReactNode }> = ({
           const res = await fetch('/api/getSolanaAssets');
           const data = await res.json();
 
+          if (data.error) throw new Error(data.error);
+
           const pyusdBalance: ITokenBalance = data.tokenBalances.find(
             (tb: ITokenBalance) =>
               tb.metadata.tokenMintAddress === process.env.pyusdMint,
