@@ -26,10 +26,19 @@ export default function Home() {
   const [txnOngoing, setTxnOngoing] = useState(false);
 
   const loadTokens = async () => {
-    setTokensLoading(true);
-    const tokens = await portal.getSolanaTokenBalances();
-    if (tokens) setTokens(tokens);
-    setTokensLoading(false);
+    try {
+      setTokensLoading(true);
+      const tokens = await portal.getSolanaTokenBalances();
+      if (tokens) setTokens(tokens);
+    } catch (e) {
+      snackbar.setSnackbarOpen(true);
+      snackbar.setSnackbarContent({
+        severity: 'error',
+        message: `Something went wrong - ${e}`,
+      });
+    } finally {
+      setTokensLoading(false);
+    }
   };
 
   useEffect(() => {

@@ -16,17 +16,29 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import { Refresh, Token } from '@mui/icons-material';
+import { useSnackbar } from '@/providers/snackbar';
 
 export default function Home() {
   const portal = usePortal();
+  const snackbar = useSnackbar();
+
   const [tokens, setTokens] = useState<ITokenBalance[]>([]);
   const [tokensLoading, setTokensLoading] = useState(false);
 
   const loadTokens = async () => {
-    setTokensLoading(true);
-    const tokens = await portal.getSolanaTokenBalances();
-    if (tokens) setTokens(tokens);
-    setTokensLoading(false);
+    try {
+      setTokensLoading(true);
+      const tokens = await portal.getSolanaTokenBalances();
+      if (tokens) setTokens(tokens);
+    } catch (e) {
+      snackbar.setSnackbarOpen(true);
+      snackbar.setSnackbarContent({
+        severity: 'error',
+        message: `Something went wrong - ${e}`,
+      });
+    } finally {
+      setTokensLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -70,71 +82,71 @@ export default function Home() {
           </Grid>
           <Box>
             <List sx={{ bgcolor: 'background.paper', p: { md: 4 } }}>
-              {tokens.length && !tokensLoading ? (
-                tokens
-                  .map((token, idx) => {
-                    return (
-                      <ListItem key={idx}>
-                        <ListItemAvatar>
-                          <Avatar
-                            alt={token.symbol}
-                            src={token.metadata?.thumbnail as string}
-                          >
-                            {!token.metadata?.thumbnail ? <Token /> : <></>}
-                          </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText
-                          primary={
-                            <Typography fontSize={{ xs: 14, md: 16 }}>
-                              {token.name}
-                            </Typography>
-                          }
-                          secondary={
-                            <Typography
-                              display={{ xs: 'none', md: 'block' }}
-                              fontSize={12}
+              {tokens.length && !tokensLoading
+                ? tokens
+                    .map((token, idx) => {
+                      return (
+                        <ListItem key={idx}>
+                          <ListItemAvatar>
+                            <Avatar
+                              alt={token.symbol}
+                              src={token.metadata?.thumbnail as string}
                             >
-                              {token.metadata.tokenMintAddress}
-                            </Typography>
-                          }
-                        />
-                        <ListItemText
-                          sx={{
-                            textAlign: 'right',
-                          }}
-                          primary={
-                            <Typography
-                              fontSize={{ xs: 14, md: 20 }}
-                              fontWeight={600}
-                              color="primary"
-                            >
-                              <Typography
-                                component="span"
-                                fontSize={{ xs: 12, md: 16 }}
-                              >
-                                {token.symbol}{' '}
+                              {!token.metadata?.thumbnail ? <Token /> : <></>}
+                            </Avatar>
+                          </ListItemAvatar>
+                          <ListItemText
+                            primary={
+                              <Typography fontSize={{ xs: 14, md: 16 }}>
+                                {token.name}
                               </Typography>
-                              {`${Number(token.balance).toFixed(3)}`}
-                            </Typography>
-                          }
-                        />
-                      </ListItem>
-                    );
-                  })
-                  .flatMap((item, idx) => {
-                    if (idx === tokens.length - 1) {
-                      return [item];
-                    }
-                    return [
-                      item,
-                      <Divider key={idx} variant="inset" component="li" />,
-                    ];
-                  })
-              ) : (
-                <ListItem sx={{ justifyContent: 'center' }}>
-                  <CircularProgress />
-                </ListItem>
-              )}
+                            }
+                            secondary={
+                              <Typography
+                                display={{ xs: 'none', md: 'block' }}
+                                fontSize={12}
+                              >
+                                {token.metadata.tokenMintAddress}
+                              </Typography>
+                            }
+                          />
+                          <ListItemText
+                            sx={{
+                              textAlign: 'right',
+                            }}
+                            primary={
+                              <Typography
+                                fontSize={{ xs: 14, md: 20 }}
+                                fontWeight={600}
+                                color="primary"
+                              >
+                                <Typography
+                                  component="span"
+                                  fontSize={{ xs: 12, md: 16 }}
+                                >
+                                  {token.symbol}{' '}
+                                </Typography>
+                                {`${Number(token.balance).toFixed(3)}`}
+                              </Typography>
+                            }
+                          />
+                        </ListItem>
+                      );
+                    })
+                    .flatMap((item, idx) => {
+                      if (idx === tokens.length - 1) {
+                        return [item];
+                      }
+                      return [
+                        item,
+                        <Divider key={idx} variant="inset" component="li" />,
+                      ];
+                    })
+                : tokensLoading && (
+                    <ListItem sx={{ justifyContent: 'center' }}>
+                      <CircularProgress />
+                    </ListItem>
+                  )}
             </List>
           </Box>
         </Box>

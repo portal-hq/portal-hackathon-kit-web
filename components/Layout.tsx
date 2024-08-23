@@ -18,7 +18,8 @@ import ListItemText from '@mui/material/ListItemText';
 import { useRouter } from 'next/router';
 import { Button, Container, InputAdornment, TextField } from '@mui/material';
 import { usePortal } from '@/providers/portal';
-import { ContentCopy, Send } from '@mui/icons-material';
+import { ContentCopy, Pending, Send } from '@mui/icons-material';
+import { useSnackbar } from '@/providers/snackbar';
 
 const DRAWER_WIDTH = 240;
 const DRAWER_ITEMS = [
@@ -43,9 +44,11 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 export default function Layout({ children }: { children: ReactNode }) {
   const theme = useTheme();
   const router = useRouter();
+  const snackbar = useSnackbar();
 
   const portal = usePortal();
   const [solanaAddress, setSolanaAddress] = useState('');
+  const [generatingSolanaAddress, setGeneratingSolanaAddress] = useState(false);
 
   const [open, setOpen] = useState(false);
 
@@ -57,9 +60,35 @@ export default function Layout({ children }: { children: ReactNode }) {
     setOpen(false);
   };
 
+  const generateSolanaAddress = async () => {
+    try {
+      setGeneratingSolanaAddress(true);
+      const address = await portal.getSolanaAddress();
+      setSolanaAddress(address);
+
+      snackbar.setSnackbarOpen(true);
+      snackbar.setSnackbarContent({
+        severity: 'success',
+        message: `Successfully generated Solana address`,
+      });
+    } catch (e) {
+      snackbar.setSnackbarOpen(true);
+      snackbar.setSnackbarContent({
+        severity: 'error',
+        message: `Something went wrong - ${e}`,
+      });
+    } finally {
+      setGeneratingSolanaAddress(false);
+    }
+  };
+
   useEffect(() => {
-    if (portal.ready) portal.getSolanaAddress();
-  }, [portal.ready]);
+    if (portal.ready && !generatingSolanaAddress) {
+      (async () => {
+        await generateSolanaAddress();
+      })();
+    }
+  }, [portal.ready, generatingSolanaAddress]);
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -109,10 +138,8 @@ export default function Layout({ children }: { children: ReactNode }) {
                   <Button
                     color="inherit"
                     variant="outlined"
-                    onClick={async () =>
-                      setSolanaAddress(await portal!.getSolanaAddress())
-                    }
-                    endIcon={<Send />}
+                    onClick={async () => await generateSolanaAddress()}
+                    endIcon={generatingSolanaAddress ? <Pending /> : <Send />}
                   >
                     Get Solana Wallet
                   </Button>
