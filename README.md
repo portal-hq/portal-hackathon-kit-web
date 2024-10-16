@@ -11,7 +11,7 @@ Before going through the quick start you'll need following tools with the minimu
 - git
 - Node (^20.16.0)
 - yarn or npm
-- [Portal Account](https://docs.portalhq.io/support/pyusd-hackathon-hub)
+- [Portal Account](https://docs.portalhq.io/support/hackathon-hub)
 - [Portal Client API Key](https://docs.portalhq.io/resources/authentication-and-api-keys#creating-a-test-client-api-key)
 
 ## Getting Started
